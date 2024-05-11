@@ -19,11 +19,11 @@ jobs:
           submodules: true
           fetch-depth: 0
 
-      - name: Build
+      - name: NPM Install
         run: npm install
 
       - name: Build
-        run: npm build
+        run: npm run build
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
