@@ -86,9 +86,9 @@ export default function App() {
                 value={type}
                 onChange={(e) => setType(e.target.value as typeof type)}
               >
-                <option value="post">글 생성</option>
                 <option value="paragraph">문장 생성</option>
                 <option value="name">이름 생성</option>
+                <option value="post">글 생성</option>
               </select>
             </label>
           </p>
