@@ -1,23 +1,24 @@
 import clsx from "clsx";
 import { useCallback, useEffect, useState } from "react";
-import { randInt, randomWords } from "./hutsori";
+import {
+  HutsoriOutput,
+  HutsoriType,
+  createHutosri,
+  generateSeed,
+} from "./hutsori";
 
-interface Output {
-  title: string;
-  cite?: string;
-  body?: string[];
-}
-
-const str0 = () => "";
+type HistoryItem = { type: HutsoriType; seed: string };
 
 export default function App() {
   const [cursor, setCursor] = useState(-1);
-  const [outputs, setOutputs] = useState<Output[]>([]);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
   const [isPlaying, setPlaying] = useState(false);
-  const [type, setType] = useState<"post" | "paragraph" | "name">("paragraph");
+  const [type, setType] = useState<HutsoriType>("paragraph");
+  const [isSeedFix, setSeedFix] = useState(false);
+  const [fixedSeed, setFixedSeed] = useState("");
 
   const onPrevClick = () => {
-    if (outputs.length + cursor <= 0) return;
+    if (history.length + cursor <= 0) return;
     setCursor(cursor - 1);
   };
   const onNextClick = () => {
@@ -27,30 +28,10 @@ export default function App() {
 
   const generate = useCallback(() => {
     setCursor(-1);
-    setOutputs((prev) => {
-      let title: string;
-      if (type === "post") title = randomWords(2, 5, str0);
-      else if (type === "name") title = randomWords(2, 3, str0, str0);
-      else title = randomWords(2, 7);
-
-      return [
-        ...prev,
-        {
-          title,
-          ...(type === "paragraph" && {
-            cite: randomWords(2, 3, str0, str0),
-          }),
-          ...(type === "post" && {
-            body: Array.from({ length: 10 }, () => {
-              return Array.from({ length: randInt(2, 4) }, () =>
-                randomWords(5, 20),
-              ).join(" ");
-            }),
-          }),
-        },
-      ];
-    });
-  }, [type]);
+    const seed = isSeedFix ? fixedSeed ?? generateSeed() : generateSeed();
+    setFixedSeed(seed);
+    setHistory((prev) => [...prev, { type, seed }]);
+  }, [type, isSeedFix, fixedSeed]);
 
   const onSubmit = useCallback(
     (e: { preventDefault: () => void }) => {
@@ -73,7 +54,14 @@ export default function App() {
     return () => clearTimeout(timerId);
   }, [isPlaying, generate]);
 
-  const output = outputs.at(cursor);
+  const shown = history.at(cursor);
+  let output: HutsoriOutput | null = null;
+  try {
+    if (shown) output = createHutosri(shown.type, shown.seed);
+  } catch (e) {
+    console.error(e);
+  }
+
   return (
     <>
       <div className="hutsori-control">
@@ -87,9 +75,27 @@ export default function App() {
                 onChange={(e) => setType(e.target.value as typeof type)}
               >
                 <option value="paragraph">문장 생성</option>
+                <option value="speech">말 문장 생성</option>
                 <option value="name">이름 생성</option>
                 <option value="post">글 생성</option>
               </select>
+            </label>
+          </p>
+          <p>
+            <input
+              type="text"
+              value={isSeedFix ? fixedSeed : shown?.seed ?? ""}
+              onChange={(e) => setFixedSeed(e.target.value)}
+              readOnly={!isSeedFix}
+              size={32}
+            />{" "}
+            <label>
+              <input
+                type="checkbox"
+                checked={isSeedFix}
+                onChange={(e) => setSeedFix(e.target.checked)}
+              />
+              시드 고정
             </label>
           </p>
           <p>
@@ -114,10 +120,11 @@ export default function App() {
         )}
       </div>
       <div className="cursor-control">
+        <div>{shown?.seed}</div>
         <button type="button" onClick={onPrevClick}>
           이전
         </button>{" "}
-        {outputs.length + cursor + 1} / {outputs.length}{" "}
+        {history.length + cursor + 1} / {history.length}{" "}
         <button type="button" onClick={onNextClick}>
           다음
         </button>{" "}
