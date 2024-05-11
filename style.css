@@ -14,10 +14,6 @@ body {
   word-break: keep-all;
 }
 
-label {
-  display: inline-block;
-}
-
 #app {
   display: flex;
   flex-direction: column;
