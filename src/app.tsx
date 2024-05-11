@@ -82,13 +82,6 @@ export default function App() {
             </label>
           </p>
           <p>
-            <input
-              type="text"
-              value={isSeedFix ? fixedSeed : shown?.seed ?? ""}
-              onChange={(e) => setFixedSeed(e.target.value)}
-              readOnly={!isSeedFix}
-              size={32}
-            />{" "}
             <label>
               <input
                 type="checkbox"
@@ -97,6 +90,16 @@ export default function App() {
               />
               시드 고정
             </label>
+          </p>
+          <p style={{ maxWidth: "100%" }}>
+            <input
+              type="text"
+              value={isSeedFix ? fixedSeed : shown?.seed ?? ""}
+              onChange={(e) => setFixedSeed(e.target.value)}
+              readOnly={!isSeedFix}
+              size={32}
+              style={{ width: "100%", boxSizing: "border-box" }}
+            />{" "}
           </p>
           <p>
             <button type="button" onClick={toggleAuto}>
