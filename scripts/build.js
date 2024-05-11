@@ -1,11 +1,11 @@
-import * as esbuild from 'esbuild';
-import { fileURLToPath } from 'node:url';
+import * as esbuild from "esbuild";
+import { fileURLToPath } from "node:url";
 
 /** @type {esbuild.BuildOptions} */
 export const options = {
-  entryPoints: ['src/main.tsx'],
-  outdir: 'www/js',
-  format: 'esm',
+  entryPoints: ["src/main.tsx"],
+  outdir: "www/js",
+  format: "esm",
   minify: true,
   bundle: true,
 };
