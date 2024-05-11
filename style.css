@@ -11,6 +11,11 @@ body {
   font-family: sans-serif;
   text-align: center;
   margin: 0;
+  word-break: keep-all;
+}
+
+label {
+  display: inline-block;
 }
 
 #app {
