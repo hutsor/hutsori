@@ -1,0 +1,29 @@
+{
+  "private": true,
+  "homepage": "https://olimot.github.io/esbuild-typescript-eslint-prettier-template",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "dev": "node scripts/dev.js",
+    "gh-pages": "node scripts/gh-pages.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "esbuild": "^0.19.11",
+    "eslint": "^8.30.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "gh-pages": "^6.1.1",
+    "prettier": "^3.2.4",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "clsx": "^2.1.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

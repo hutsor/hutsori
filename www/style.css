@@ -1,0 +1,69 @@
+html,
+body {
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+body {
+  font-family: sans-serif;
+  text-align: center;
+  margin: 0;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.hutsori-control {
+  margin: 8px;
+}
+
+.output-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1 0;
+  max-width: 640px;
+  text-align: left;
+}
+
+.output-box--with-body {
+  justify-content: flex-start;
+}
+
+.cursor-control {
+  margin: 8px;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+.output-box h2 {
+  text-align: center;
+}
+
+.output-box .citation {
+  text-align: right;
+  color: #666;
+}
+
+.output-box .citation::before {
+  content: "-";
+}
+
+.output-box h2:empty::before {
+  color: #aaa;
+  content: "여기에 헛소리가 생성됩니다.";
+}
