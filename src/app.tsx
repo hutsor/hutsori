@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
-import { randInt, randomWord, randomWords } from "./hutsori";
 import clsx from "clsx";
+import { useCallback, useEffect, useState } from "react";
+import { randInt, randomWords } from "./hutsori";
 
 interface Output {
   title: string;
