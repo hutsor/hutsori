@@ -45,14 +45,18 @@ export default function App() {
 
   useEffect(() => {
     if (!isPlaying) return;
+    setSeedFix(false);
 
     let timerId = window.setTimeout(function iterate() {
-      generate();
+      setCursor(-1);
+      const seed = generateSeed();
+      setFixedSeed(seed);
+      setHistory((prev) => [...prev, { type, seed }]);
       timerId = window.setTimeout(iterate, 1000);
     });
 
     return () => clearTimeout(timerId);
-  }, [isPlaying, generate]);
+  }, [isPlaying]);
 
   const shown = history.at(cursor);
   let output: HutsoriOutput | null = null;
