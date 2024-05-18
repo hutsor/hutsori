@@ -458,6 +458,5 @@ export const randomHanjaeo = (prng: () => number) => {
     sampleByWeights(hanjaeum, prng),
   ).join("");
   const postprocessed = postprocess(word);
-  if (postprocessed !== word) console.log(word, "->", postprocessed);
   return postprocessed;
 };

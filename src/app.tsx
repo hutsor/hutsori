@@ -6,7 +6,6 @@ import {
   HutsoriType,
   createHutosri,
 } from "./hutsori";
-import { dictP } from "./hyundain";
 import { generateSeed } from "./random";
 
 export default function App() {
@@ -17,9 +16,7 @@ export default function App() {
   const [type, setType] = useState<HutsoriType>("speech");
   const [isSeedFix, setSeedFix] = useState(false);
   const [fixedSeed, setFixedSeed] = useState("");
-  useEffect(() => {
-    dictP.then(console.log);
-  }, []);
+
   const onPrevClick = () => {
     if (history.length + cursor <= 0) return;
     setCursor(cursor - 1);
