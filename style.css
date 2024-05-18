@@ -33,7 +33,7 @@ body {
   justify-content: center;
   flex: 1 0;
   max-width: 640px;
-  text-align: left;
+  text-align: justify;
   margin: 8px;
 }
 
