@@ -1,22 +1,25 @@
 import clsx from "clsx";
 import { useCallback, useEffect, useState } from "react";
 import {
+  HutsoriInput,
   HutsoriOutput,
   HutsoriType,
   createHutosri,
-  generateSeed,
 } from "./hutsori";
-
-type HistoryItem = { type: HutsoriType; seed: string };
+import { dictP } from "./hyundain";
+import { generateSeed } from "./random";
 
 export default function App() {
   const [cursor, setCursor] = useState(-1);
-  const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [history, setHistory] = useState<HutsoriInput[]>([]);
   const [isPlaying, setPlaying] = useState(false);
-  const [type, setType] = useState<HutsoriType>("paragraph");
+  const [mode, setMode] = useState<"선비" | "오랑캐">("선비");
+  const [type, setType] = useState<HutsoriType>("speech");
   const [isSeedFix, setSeedFix] = useState(false);
   const [fixedSeed, setFixedSeed] = useState("");
-
+  useEffect(() => {
+    dictP.then(console.log);
+  }, []);
   const onPrevClick = () => {
     if (history.length + cursor <= 0) return;
     setCursor(cursor - 1);
@@ -26,20 +29,13 @@ export default function App() {
     setCursor(cursor + 1);
   };
 
-  const generate = useCallback(() => {
+  const onSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
     setCursor(-1);
     const seed = isSeedFix ? fixedSeed ?? generateSeed() : generateSeed();
     setFixedSeed(seed);
-    setHistory((prev) => [...prev, { type, seed }]);
-  }, [type, isSeedFix, fixedSeed]);
-
-  const onSubmit = useCallback(
-    (e: { preventDefault: () => void }) => {
-      e.preventDefault();
-      generate();
-    },
-    [generate],
-  );
+    setHistory((prev) => [...prev, { type, mode, seed }]);
+  };
 
   const toggleAuto = useCallback(() => setPlaying((p) => !p), []);
 
@@ -51,7 +47,7 @@ export default function App() {
       setCursor(-1);
       const seed = generateSeed();
       setFixedSeed(seed);
-      setHistory((prev) => [...prev, { type, seed }]);
+      setHistory((prev) => [...prev, { type, mode, seed }]);
       timerId = window.setTimeout(iterate, 1000);
     });
 
@@ -61,7 +57,7 @@ export default function App() {
   const shown = history.at(cursor);
   let output: HutsoriOutput | null = null;
   try {
-    if (shown) output = createHutosri(shown.type, shown.seed);
+    if (shown) output = createHutosri(shown);
   } catch (e) {
     console.error(e);
   }
@@ -71,6 +67,18 @@ export default function App() {
       <div className="hutsori-control">
         <h1>헛소리 제조기</h1>
         <form onSubmit={onSubmit}>
+          <p>
+            <label>
+              모드:{" "}
+              <select
+                value={mode}
+                onChange={(e) => setMode(e.target.value as typeof mode)}
+              >
+                <option value="오랑캐">오랑캐</option>
+                <option value="선비">선비</option>
+              </select>
+            </label>
+          </p>
           <p>
             <label>
               생성 형태:{" "}
