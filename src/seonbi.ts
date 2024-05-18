@@ -1,4 +1,4 @@
-import { randInt, sampleByWeights } from "./random";
+import { randNorm, sampleByWeights } from "./random";
 
 const hanjaeum: [string, number][] = [
   ["가", 10],
@@ -453,9 +453,9 @@ const postprocess = (word: string) => {
 };
 
 export const randomHanjaeo = (prng: () => number) => {
-  const length = randInt(1, 5, prng);
+  const length = Math.min(Math.max(1, Math.round(randNorm(prng, 2, 2))), 5);
   const word = Array.from({ length }, () =>
-    sampleByWeights(hanjaeum, prng),
+    sampleByWeights(prng, hanjaeum),
   ).join("");
   const postprocessed = postprocess(word);
   return postprocessed;

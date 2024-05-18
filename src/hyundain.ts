@@ -84,7 +84,7 @@ const possibleTypes = [
 export const randomWord = (prng: () => number) => {
   let result = "";
   while (!result) {
-    const [word, type] = sample(store.current, prng);
+    const [word, type] = sample(prng, store.current);
     if (possibleTypes.includes(type)) result = word;
     // else if (word.endsWith("다")) result = word.slice(0, -1);
   }

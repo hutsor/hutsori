@@ -144,10 +144,10 @@ export const randomWords = (
   max: number,
   prng: () => number,
   getWord: StringGenerator,
-  getEnding: StringGenerator | null = () => sampleByWeights(endings, prng),
-  getSuffix: StringGenerator | null = () => sampleByWeights(suffix, prng),
+  getEnding: StringGenerator | null = () => sampleByWeights(prng, endings),
+  getSuffix: StringGenerator | null = () => sampleByWeights(prng, suffix),
 ) => {
-  const length = randInt(min, max, prng);
+  const length = randInt(prng, min, max);
   return Array.from({ length }, (_, i) => {
     const word = getWord();
     if (i === length - 1) return appendEomi(word, getEnding?.() ?? "");
@@ -179,7 +179,7 @@ export const createHutosri = ({ mode, type, seed }: HutsoriInput) => {
   else if (type === "name")
     title = randomWords(2, 3, prng, wordgen, null, null);
   else if (type === "speech")
-    title = randomWords(2, 7, prng, wordgen, () => sample(speechEndings, prng));
+    title = randomWords(2, 7, prng, wordgen, () => sample(prng, speechEndings));
   else title = randomWords(2, 7, prng, wordgen);
 
   return {
@@ -189,7 +189,7 @@ export const createHutosri = ({ mode, type, seed }: HutsoriInput) => {
     }),
     ...(type === "post" && {
       body: Array.from({ length: 10 }, () => {
-        return Array.from({ length: randInt(2, 4, prng) }, () =>
+        return Array.from({ length: randInt(prng, 2, 4) }, () =>
           randomWords(5, 20, prng, wordgen),
         ).join(" ");
       }),

@@ -44,12 +44,12 @@ export function xoshiro128ss(seed: string) {
   };
 }
 
-export const randInt = (min: number, max: number, prng: () => number) =>
+export const randInt = (prng: () => number, min: number, max: number) =>
   Math.floor(prng() * (max + 1 - min)) + min;
 
 export function sampleByWeights<T>(
-  weights: ArrayLike<[T, number]>,
   prng: () => number,
+  weights: ArrayLike<[T, number]>,
 ) {
   const accws: number[] = [];
   let sum = 0;
@@ -66,12 +66,21 @@ export function sampleByWeights<T>(
 }
 
 export const sampleIndex = (
-  array: { length: number },
   prng: () => number,
+  array: { length: number },
 ): number => {
-  return randInt(0, array.length - 1, prng);
+  return randInt(prng, 0, array.length - 1);
 };
 
-export const sample = <T>(array: ArrayLike<T>, prng: () => number): T => {
-  return array[randInt(0, array.length - 1, prng)];
+export const sample = <T>(prng: () => number, array: ArrayLike<T>): T => {
+  return array[randInt(prng, 0, array.length - 1)];
 };
+
+// Standard Normal variate using Box-Muller transform.
+export function randNorm(prng: () => number, mean = 0, stdev = 1) {
+  const u = 1 - prng(); // Converting [0,1) to (0,1]
+  const v = prng();
+  const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  // Transform to the desired mean and standard deviation:
+  return z * stdev + mean;
+}
